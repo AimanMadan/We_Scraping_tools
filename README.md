@@ -7,7 +7,7 @@ This repository contains several Python scripts for web scraping and image proce
 - **getData.py**: Fetches content from given URLs, extracts main text and images, and stores them in separate directories.
 - **getLinks.py**: Scrapes URLs from 'onclick' attributes of li elements in the given URLs.
 - **imageToText.py**: Processes images in a specified directory to extract text using Tesseract OCR.
-- **mergeText.py**: Merges text extracted from images into a single file.
+- **mergeText.py**: Merges all text into a single file.
 - **image_2_text.txt**: Stores the extracted text from the images.
 - **merged_text.txt**: Stores the merged text from all extracted texts.
 - **input_urls.txt**: A file containing URLs to be scraped.
@@ -73,7 +73,7 @@ The extracted text will be saved in text files with the same names as the images
 
 ### 4. mergeText.py
 
-This script merges text extracted from images into a single file.
+This script merges text files into a single file.
 
 ```bash
 python mergeText.py
