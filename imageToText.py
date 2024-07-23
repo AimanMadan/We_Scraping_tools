@@ -1,39 +1,67 @@
 import os
+from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
-from PIL import Image
 
-# Specify the Tesseract executable path
-pytesseract.pytesseract.tesseract_cmd = r'"C:/Program Files/Tesseract-OCR/tesseract.exe"'  # Change this path as necessary
+# Specify the path to tesseract.exe
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# Path to the Article directory
-article_dir = 'C:/Users/aiman/Documents/thankful2plants/Articles'
-
-# Function to process each image
-def process_image(image_path):
+def preprocess_image(image_path):
     try:
-        # Open the image file
-        with Image.open(image_path) as img:
-            # Use pytesseract to extract text
-            text = pytesseract.image_to_string(img)
-        return text
+        image = Image.open(image_path)
+        # Convert image to grayscale
+        image = image.convert('L')
+        # Apply some filters
+        image = image.filter(ImageFilter.MedianFilter())
+        enhancer = ImageEnhance.Contrast(image)
+        image = enhancer.enhance(2)
+        # Resize image if needed
+        image = image.resize((image.width * 2, image.height * 2), Image.LANCZOS)
+        return image
     except Exception as e:
-        print(f"Failed to process image {image_path}: {e}")
+        print(f"Error preprocessing image {image_path}: {e}")
         return None
 
-# Walk through all the directories and files in the Article directory
-for root, dirs, files in os.walk(article_dir):
-    for file in files:
-        file_path = os.path.join(root, file)
-        # Check if the file is an image (you can add more image extensions if needed)
-        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff')):
-            text = process_image(file_path)
-            if text:
-                # Create a text file with the same name as the image file
-                text_file_path = os.path.splitext(file_path)[0] + '.txt'
-                with open(text_file_path, 'w') as text_file:
-                    text_file.write(text)
-                # Delete the image file
-                os.remove(file_path)
-                print(f"Processed and deleted image: {file_path}")
+def extract_text_from_image(image_path):
+    try:
+        # Preprocess image
+        image = preprocess_image(image_path)
+        if image is None:
+            return ""
+        # Extract text from image
+        text = pytesseract.image_to_string(image)
+        return text
+    except Exception as e:
+        print(f"Error extracting text from image {image_path}: {e}")
+        return ""
 
-print("Processing complete.")
+def extract_text_from_articles(root_dir, output_file_path):
+    combined_text = ""
+    
+    for i in range(1, 2279):
+        subdir = os.path.join(root_dir, f"article_{i}")
+        if os.path.exists(subdir) and os.path.isdir(subdir):
+            print(f"Processing directory: {subdir}")
+            for file in os.listdir(subdir):
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.tiff', '.bmp', '.gif')):
+                    image_path = os.path.join(subdir, file)
+                    print(f"Processing image: {image_path}")
+                    text = extract_text_from_image(image_path)
+                    if text:
+                        combined_text += f"Text from {image_path}:\n{text}\n\n"
+                    else:
+                        print(f"Skipping image {image_path} due to extraction failure.")
+    
+    # Save combined text to a file
+    with open(output_file_path, "w") as file:
+        file.write(combined_text)
+    
+    print(f"Text has been extracted and saved to {output_file_path}")
+
+# Root directory containing articles subfolders
+root_dir = r"C:\Users\aiman\Documents\thankful2plants\Articles\Articles"
+
+# Output file path
+output_file_path = r"C:\Users\aiman\Documents\thankful2plants\Articles\Articles\image_2_text.txt"
+
+# Extract text from all images in articles subfolders and save to file
+extract_text_from_articles(root_dir, output_file_path)
