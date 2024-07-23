@@ -1,25 +1,30 @@
 # Web Scraping and OCR Project
 
-This repository contains three Python scripts for web scraping and image processing. These scripts fetch URLs, extract text and images, and process images to extract text using OCR.
+This repository contains several Python scripts for web scraping and image processing. These scripts fetch URLs, extract text and images, and process images to extract text using OCR.
 
 ## Project Structure
 
-- `getData.py`: Fetches content from given URLs, extracts main text and images, and stores them in separate directories.
-- `getLinks.py`: Scrapes URLs from 'onclick' attributes of `li` elements in the given URLs.
-- `imageToText.py`: Processes images in a specified directory to extract text using Tesseract OCR.
+- **getData.py**: Fetches content from given URLs, extracts main text and images, and stores them in separate directories.
+- **getLinks.py**: Scrapes URLs from 'onclick' attributes of li elements in the given URLs.
+- **imageToText.py**: Processes images in a specified directory to extract text using Tesseract OCR.
+- **mergeText.py**: Merges text extracted from images into a single file.
+- **image_2_text.txt**: Stores the extracted text from the images.
+- **merged_text.txt**: Stores the merged text from all extracted texts.
+- **input_urls.txt**: A file containing URLs to be scraped.
+- **scraped_urls.txt**: A file containing URLs scraped from the input URLs.
 
 ## Prerequisites
 
 - Python 3.x
 - Required Python packages:
-  - `requests`
-  - `beautifulsoup4`
-  - `pytesseract`
-  - `Pillow`
+  - requests
+  - beautifulsoup4
+  - pytesseract
+  - Pillow
 
 You can install the required packages using the following command:
 
-```sh
+```bash
 pip install requests beautifulsoup4 pytesseract pillow
 ```
 
@@ -27,44 +32,57 @@ Additionally, you need to install Tesseract OCR. You can download it from [here]
 
 ## Usage
 
-### 1. `getLinks.py`
+### 1. getLinks.py
 
-This script scrapes URLs from 'onclick' attributes of `li` elements in the provided URLs and saves them to a file.
+This script scrapes URLs from 'onclick' attributes of li elements in the provided URLs and saves them to a file.
 
-```sh
+```bash
 python getLinks.py
 ```
 
-1. Create a file named `input_urls.txt` and add the URLs you want to scrape, one per line.
-2. Run the script.
+- Create a file named `input_urls.txt` and add the URLs you want to scrape, one per line.
+- Run the script.
 
 The scraped URLs will be saved in `scraped_urls.txt`.
 
-### 2. `getData.py`
+### 2. getData.py
 
 This script fetches content from URLs, extracts main text and images, and stores them in separate directories.
 
-```sh
+```bash
 python getData.py
 ```
 
-1. Ensure `scraped_urls.txt` (created from the previous step) is in the same directory.
-2. Run the script.
+- Ensure `scraped_urls.txt` (created from the previous step) is in the same directory.
+- Run the script.
 
 The content will be saved in directories named `article_1`, `article_2`, etc.
 
-### 3. `imageToText.py`
+### 3. imageToText.py
 
 This script processes images in a specified directory to extract text using Tesseract OCR.
 
-```sh
+```bash
 python imageToText.py
 ```
 
-1. Update the `article_dir` variable to point to the directory containing your images.
-2. Run the script.
+- Update the `article_dir` variable to point to the directory containing your images.
+- Run the script.
 
 The extracted text will be saved in text files with the same names as the images, and the original images will be deleted.
+
+### 4. mergeText.py
+
+This script merges text extracted from images into a single file.
+
+```bash
+python mergeText.py
+```
+
+- Ensure `image_2_text.txt` contains the extracted text.
+- Run the script.
+
+The merged text will be saved in `merged_text.txt`.
 
 ## Configuration
 
@@ -86,7 +104,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
-- [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/)
-- [Requests](https://docs.python-requests.org/en/latest/)
+- Tesseract OCR
+- BeautifulSoup
+- Requests
 
